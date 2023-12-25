@@ -1,28 +1,29 @@
-from openai import OpenAI
 import json
-import re
-import os 
+import os
 import random
+import re
 
-from sql.models import db, TrainingData
-
-from google.cloud import storage
 from dotenv import load_dotenv
+from google.cloud import storage
+from openai import OpenAI
+
+from sql.models import TrainingData, db
 
 load_dotenv()
 
 TRANSCRIPT_BUCKET_NAME = os.getenv("TRANSCRIPT_BUCKET_NAME")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-TEMPERATURE=0.8
-MAX_TOKENS=1024
-FREQUENCY_PENALTY=0.5
+TEMPERATURE = 0.8
+MAX_TOKENS = 1024
+FREQUENCY_PENALTY = 0.5
+
 
 def parse_text_string(text):
     qa_pairs = []
 
     # Use regular expression to find Q: A: pairs
-    pattern = re.compile(r'Q: (.*?)(A: (.*?)(?=(Q:|$)))', re.DOTALL)
+    pattern = re.compile(r"Q: (.*?)(A: (.*?)(?=(Q:|$)))", re.DOTALL)
     matches = pattern.findall(text)
 
     for match in matches:
@@ -32,9 +33,10 @@ def parse_text_string(text):
 
     return qa_pairs
 
+
 def get_response_json(video_id: int, num_questions: int, creator_id: int):
     client = OpenAI(api_key=OPENAI_API_KEY)
-    with open('prompt.txt', 'r') as file:
+    with open("prompt.txt", "r") as file:
         prompt = file.read()
 
     prompt = prompt.format(num_questions=num_questions)
@@ -42,7 +44,7 @@ def get_response_json(video_id: int, num_questions: int, creator_id: int):
     storage_client = storage.Client()
     bucket = storage_client.bucket(TRANSCRIPT_BUCKET_NAME)
     blob = bucket.blob(f"{video_id}.txt")
-    transcript = blob.download_as_string().decode('utf-8')
+    transcript = blob.download_as_string().decode("utf-8")
 
     # First check if there already any questions and answers for this video
     # If there are, add them to the prompt
@@ -54,15 +56,22 @@ def get_response_json(video_id: int, num_questions: int, creator_id: int):
         random.shuffle(training_data)
         for data in training_data[:10]:
             prompt += f"Q: {data.question} A: {data.answer}\n\n"
-    
-    prompts = [{"role": "assistant", "content": prompt}, {"role": "user", "content": transcript}]
 
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages = prompts,
-        temperature=TEMPERATURE,
-        max_tokens=MAX_TOKENS,
-    ).choices[0].message.content
+    prompts = [
+        {"role": "assistant", "content": prompt},
+        {"role": "user", "content": transcript},
+    ]
+
+    response = (
+        client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=prompts,
+            temperature=TEMPERATURE,
+            max_tokens=MAX_TOKENS,
+        )
+        .choices[0]
+        .message.content
+    )
 
     qa_pairs = parse_text_string(response)
     return qa_pairs

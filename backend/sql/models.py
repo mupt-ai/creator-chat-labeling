@@ -1,12 +1,15 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
+
 
 class Creators(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class TrainingData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -15,6 +18,7 @@ class TrainingData(db.Model):
     creator_id = db.Column(db.Integer, nullable=False)
     video_id = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class YoutubeTranscripts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
