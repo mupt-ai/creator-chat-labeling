@@ -28,8 +28,10 @@ async def download_video():
             return {"message": "Error downloading video!"}
 
 
-@training_data_blueprint.route("/add_training_data", methods=["POST"])
-def add_training_data():
+@training_data_blueprint.route(
+    "/training_data", methods=["POST", "GET", "DELETE", "PUT"]
+)
+def training_data():
     if request.method == "POST":
         creator_id = request.args.get("creator_id")
         n_questions = request.args.get("n_questions")
@@ -48,3 +50,30 @@ def add_training_data():
             db.session.commit()
 
         return qa_pairs
+    elif request.method == "GET":
+        creator_id = request.args.get("creator_id")
+
+        training_data = TrainingData.query.filter_by(creator_id=creator_id).all()
+
+        return [
+            {"id": data.id, "question": data.question, "answer": data.answer}
+            for data in training_data
+        ]
+
+    elif request.method == "DELETE":
+        qanda_id = request.args.get("id")
+        TrainingData.query.filter_by(id=qanda_id).delete()
+        db.session.commit()
+
+        return {"message": "Training data deleted successfully!"}
+    elif request.method == "PUT":
+        qanda_id = request.args.get("id")
+        question = request.args.get("question")
+        answer = request.args.get("answer")
+
+        entry = TrainingData.query.filter_by(id=qanda_id).first()
+        entry.question = question
+        entry.answer = answer
+        db.session.commit()
+
+        return {"message": "Training data updated successfully!"}
