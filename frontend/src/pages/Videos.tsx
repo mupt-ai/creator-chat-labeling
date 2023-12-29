@@ -3,9 +3,10 @@ import MuptNewCreatorButton from "../components/MuptNewCreatorButton"
 import MuptCreatorSelect from "../components/MuptCreatorSelect"
 import MuptModal from "../components/MuptModal"
 import { useState } from "react";
+import MuptNewVideoButton from "../components/MuptNewVideoButton";
 
 
-const Dashboard = () => {
+const Videos = () => {
     const [showModal, setShowModal] = useState(false);
 
     const closeModal = () => {
@@ -14,7 +15,6 @@ const Dashboard = () => {
 
     const openModal = () => {
         console.log(showModal);
-
         setShowModal(true);
     }
 
@@ -27,8 +27,7 @@ const Dashboard = () => {
                 <div className="grow">
                     <div className="flex flex-row grow">
                         <MuptCreatorSelect openModal={showModal} />
-                        <MuptNewCreatorButton onClick={openModal} />
-                        <MuptModal show={showModal} onClose={closeModal} />
+                        <MuptNewVideoButton onClick={openModal} />
                     </div>
                 </div>
             </div>
@@ -36,5 +35,5 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard;
+export default Videos;
 

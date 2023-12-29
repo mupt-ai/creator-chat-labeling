@@ -1,5 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import { IconType } from 'react-icons'
+import { useNavigate } from 'react-router-dom';
 
 type ItemTitleInfo = {
   itemName: string;
@@ -14,6 +15,8 @@ type MuptSidebarProps = {
 }
 
 const MuptSidebarBase: React.FC<MuptSidebarProps> = (props) => {
+  const navigate = useNavigate();
+
   return (
     <Sidebar className='dark rounded rounded-lg'>
       <Sidebar.Logo href="#" img={props.logoUrl} imgAlt="{title} logo">
@@ -22,7 +25,7 @@ const MuptSidebarBase: React.FC<MuptSidebarProps> = (props) => {
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           {props.itemTitleToInfo.map((itemInfo, index) => (
-            <Sidebar.Item key={index} href={itemInfo.href} icon={itemInfo.icon}>
+            <Sidebar.Item key={index} onClick={() => navigate(itemInfo.href)} icon={itemInfo.icon}>
               {itemInfo.itemName}
             </Sidebar.Item>
           ))}

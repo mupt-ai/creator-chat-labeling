@@ -10,21 +10,26 @@ const updateChoiceLocalStorage = (choice: Option | string | null) => {
     }
 };
 
-const MuptDropdown = () => {
+type MuptDropdownProps = {
+    openModal: boolean;
+}
+
+// TODO: Figure out why useEffect is not working properly with 
+const MuptDropdown: React.FC<MuptDropdownProps> = (props) => {
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log("Fetching creators ayaya")
                 const creators = await getCreators();
                 setOptions(creators["creators"]);
             } catch (error) {
                 console.error('Error fetching creators:', error);
             }
         };
-
         fetchData();
-    }, []);
+    }, [props.openModal]);
 
     let selectedCreatorId = localStorage.getItem("selectedCreatorId") || "";
     let selectedCreatorName = localStorage.getItem("selectedCreatorName") || "";

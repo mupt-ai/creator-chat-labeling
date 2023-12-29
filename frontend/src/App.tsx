@@ -1,5 +1,6 @@
 import './App.css'
 import Dashboard from './pages/Dashboard';
+import Videos from './pages/Videos';
 
 import {
   createBrowserRouter,
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Dashboard />,
   },
+  {
+    path: "/videos",
+    element: <Videos />,
+  }
 ]);
 
 function App() {

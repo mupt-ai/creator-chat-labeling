@@ -15,12 +15,12 @@ const MuptSidebar = () => {
             itemTitleToInfo={[
                 {
                     itemName: "Creator Dashboard",
-                    href: "#",
+                    href: "/",
                     icon: HiUser,
                 },
                 {
                     itemName: "New Videos",
-                    href: "#",
+                    href: "/videos",
                     icon: HiVideoCamera
                 },
                 {
