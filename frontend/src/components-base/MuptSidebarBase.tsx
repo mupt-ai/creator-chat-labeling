@@ -17,7 +17,7 @@ const MuptSidebarBase: React.FC<MuptSidebarProps> = (props) => {
   return (
     <Sidebar className='dark rounded rounded-lg'>
       <Sidebar.Logo href="#" img={props.logoUrl} imgAlt="{title} logo">
-        {props.title} 
+        {props.title}
       </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>

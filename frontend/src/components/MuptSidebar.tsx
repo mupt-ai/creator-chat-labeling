@@ -1,16 +1,13 @@
 import MuptSidebarBase from '../components-base/MuptSidebarBase';
 import {
-    HiArrowSmRight,
     HiChartPie,
-    HiInbox,
-    HiOutlineMinusSm,
-    HiOutlinePlusSm,
-    HiShoppingBag,
+    HiVideoCamera,
     HiTable,
     HiUser,
-  } from 'react-icons/hi';
+    HiChat,
+} from 'react-icons/hi';
 
-export const MuptSidebar = () => {
+const MuptSidebar = () => {
     return (
         <MuptSidebarBase
             logoUrl="vite.svg"
@@ -19,14 +16,31 @@ export const MuptSidebar = () => {
                 {
                     itemName: "Creator Dashboard",
                     href: "#",
-                    icon: HiUser 
+                    icon: HiUser,
+                },
+                {
+                    itemName: "New Videos",
+                    href: "#",
+                    icon: HiVideoCamera
                 },
                 {
                     itemName: "Training Data",
                     href: "#",
                     icon: HiTable
                 },
+                {
+                    itemName: "Bot Analytics",
+                    href: "#",
+                    icon: HiChartPie
+                },
+                {
+                    itemName: "Test Chat",
+                    href: "#",
+                    icon: HiChat
+                }
             ]}
         />
     )
 }
+
+export default MuptSidebar;
