@@ -1,5 +1,5 @@
 import MuptOneLabelModalBase from "../components-base/MuptOneLabelModalBase";
-import { newCreator } from "../api/creators";
+import { NewCreator } from "../api/creators";
 
 type MuptModalProps = {
     show: boolean;
@@ -7,7 +7,7 @@ type MuptModalProps = {
 }
 
 const onClick = async (creatorName: string) => {
-    await newCreator(creatorName);
+    await NewCreator(creatorName);
 }
 
 const MuptModal: React.FC<MuptModalProps> = (props) => {

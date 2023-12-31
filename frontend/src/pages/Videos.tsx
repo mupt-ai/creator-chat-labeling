@@ -4,6 +4,7 @@ import MuptCreatorSelect from "../components/MuptCreatorSelect"
 import MuptModal from "../components/MuptModal"
 import { useState } from "react";
 import MuptNewVideoButton from "../components/MuptNewVideoButton";
+import MuptVideoTable from "../components/MuptVideoTable";
 
 
 const Videos = () => {
@@ -28,6 +29,9 @@ const Videos = () => {
                     <div className="flex flex-row grow">
                         <MuptCreatorSelect openModal={showModal} />
                         <MuptNewVideoButton onClick={openModal} />
+                    </div>
+                    <div className="mr-16 ml-16 mt-16">
+                        <MuptVideoTable />
                     </div>
                 </div>
             </div>

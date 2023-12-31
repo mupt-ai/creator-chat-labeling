@@ -13,8 +13,6 @@ const Dashboard = () => {
     }
 
     const openModal = () => {
-        console.log(showModal);
-
         setShowModal(true);
     }
 

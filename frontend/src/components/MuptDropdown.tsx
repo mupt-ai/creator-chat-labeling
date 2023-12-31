@@ -1,5 +1,5 @@
 import MuptDropdownBase from "../components-base/MuptDropdownBase";
-import { getCreators } from "../api/creators";
+import { GetCreators } from "../api/creators";
 import { useState, useEffect } from "react";
 import { Option } from "../components-base/MuptDropdownBase";
 
@@ -22,7 +22,7 @@ const MuptDropdown: React.FC<MuptDropdownProps> = (props) => {
         const fetchData = async () => {
             try {
                 console.log("Fetching creators ayaya")
-                const creators = await getCreators();
+                const creators = await GetCreators();
                 setOptions(creators["creators"]);
             } catch (error) {
                 console.error('Error fetching creators:', error);
