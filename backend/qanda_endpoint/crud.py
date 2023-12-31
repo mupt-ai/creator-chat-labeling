@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from qanda_endpoint.openai import get_response_json
 from qanda_endpoint.transcribe import transcribe_and_upload
 from qanda_endpoint.youtube_dl import download_youtube_link
-from sql.models import Creators, TrainingData, db
+from sql.models import Creators, TrainingData, YoutubeTranscripts, db
 
 training_data_blueprint = Blueprint("training_data", __name__)
 
@@ -27,6 +27,44 @@ async def download_video():
         else:
             return {"message": "Error downloading video!"}
 
+@training_data_blueprint.route("/videos", methods=["GET", "DELETE"])
+def videos():
+    if request.method == "GET":
+        creator_id = request.args.get("creator_id")
+        page = request.args.get("page")
+        page_size = request.args.get("page_size")
+
+        creator = Creators.query.filter_by(id=creator_id).first()
+        if not creator:
+            return {"message": "Invalid creator_id!"}
+        
+        videos = YoutubeTranscripts.query.filter_by(creator_id=creator_id).paginate(page=int(page), per_page=int(page_size), error_out=False).items
+
+
+        return [
+            {"id": video.id, "video_id": video.video_id}
+            for video in videos
+        ]
+    elif request.method == "DELETE":
+        video_id = request.args.get("video_id")
+        YoutubeTranscripts.query.filter_by(video_id=video_id).delete()
+        db.session.commit()
+
+        return {"message": "Video deleted successfully!"}
+
+@training_data_blueprint.route("/numVideoPages", methods=["GET"])
+def get_num_video_pages():
+    if request.method == "GET":
+        creator_id = request.args.get("creator_id")
+        page_size = request.args.get("page_size")
+
+        creator = Creators.query.filter_by(id=creator_id).first()
+        if not creator:
+            return {"message": "Invalid creator_id!"}
+        
+        num_pages = YoutubeTranscripts.query.filter_by(creator_id=creator_id).count() // int(page_size) + 1
+
+        return {"num_pages": num_pages}
 
 @training_data_blueprint.route(
     "/training_data", methods=["POST", "GET", "DELETE", "PUT"]
