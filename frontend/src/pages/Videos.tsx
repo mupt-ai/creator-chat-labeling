@@ -1,11 +1,9 @@
 import MuptSidebar from "../components/MuptSidebar"
-import MuptNewCreatorButton from "../components/MuptNewCreatorButton"
 import MuptCreatorSelect from "../components/MuptCreatorSelect"
-import MuptModal from "../components/MuptModal"
-import { useState } from "react";
+import { useState, createContext } from "react";
 import MuptNewVideoButton from "../components/MuptNewVideoButton";
 import MuptVideoTable from "../components/MuptVideoTable";
-
+import BasePage from "./Basepage";
 
 const Videos = () => {
     const [showModal, setShowModal] = useState(false);
@@ -20,22 +18,17 @@ const Videos = () => {
     }
 
     return (
-        <div className='flex flex-col'>
-            <div className='flex flex-row h-[100vh]'>
-                <div className='mt-6 ml-4 mb-4'>
-                    <MuptSidebar />
+        <BasePage pageContent={
+            <>
+                <div className="flex flex-row grow">
+                    <MuptCreatorSelect openModal={showModal} />
+                    <MuptNewVideoButton onClick={openModal} />
                 </div>
-                <div className="grow">
-                    <div className="flex flex-row grow">
-                        <MuptCreatorSelect openModal={showModal} />
-                        <MuptNewVideoButton onClick={openModal} />
-                    </div>
-                    <div className="mr-16 ml-16 mt-16">
-                        <MuptVideoTable />
-                    </div>
+                <div className="mr-16 ml-16 mt-16">
+                    <MuptVideoTable />
                 </div>
-            </div>
-        </div>
+            </>
+        }></BasePage>
     )
 }
 

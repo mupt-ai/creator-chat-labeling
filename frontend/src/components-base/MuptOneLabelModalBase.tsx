@@ -5,7 +5,7 @@ type MuptModalProps = {
     onClose(): void;
     title: string;
     labelValue: string;
-    onClick(arg: string): void;
+    onClick(arg: string): Promise<void>;
 }
 
 import { useState } from 'react';
@@ -32,7 +32,12 @@ const MuptOneLabelModalBase: React.FC<MuptModalProps> = (props) => {
                     />
                 </div>
                 <div className="flex">
-                    <Button onClick={() => { props.onClick(name); props.onClose() }}>Add</Button>
+                    <Button onClick={() => {
+                        props.onClick(name).then(() => {
+                            setName('');
+                            props.onClose();
+                        })
+                    }}>Add</Button>
                 </div>
             </div>
         </Modal.Body>

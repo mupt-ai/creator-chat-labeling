@@ -3,7 +3,7 @@ import MuptNewCreatorButton from "../components/MuptNewCreatorButton"
 import MuptCreatorSelect from "../components/MuptCreatorSelect"
 import MuptModal from "../components/MuptModal"
 import { useState } from "react";
-
+import BasePage from "./Basepage";
 
 const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
@@ -17,20 +17,15 @@ const Dashboard = () => {
     }
 
     return (
-        <div className='flex flex-col'>
-            <div className='flex flex-row h-[100vh]'>
-                <div className='mt-6 ml-4 mb-4'>
-                    <MuptSidebar />
+        <BasePage pageContent={
+            <>
+                <div className="flex flex-row grow">
+                    <MuptCreatorSelect openModal={showModal} />
+                    <MuptNewCreatorButton onClick={openModal} />
+                    <MuptModal show={showModal} onClose={closeModal} />
                 </div>
-                <div className="grow">
-                    <div className="flex flex-row grow">
-                        <MuptCreatorSelect openModal={showModal} />
-                        <MuptNewCreatorButton onClick={openModal} />
-                        <MuptModal show={showModal} onClose={closeModal} />
-                    </div>
-                </div>
-            </div>
-        </div>
+            </>
+        }></BasePage>
     )
 }
 

@@ -1,27 +1,30 @@
 import MuptDropdownBase from "../components-base/MuptDropdownBase";
-import { GetCreators } from "../api/creators";
-import { useState, useEffect } from "react";
+import { GetCreators } from "../api/Creators";
+import { useState, useEffect, useContext } from "react";
 import { Option } from "../components-base/MuptDropdownBase";
+import { CurrentCreatorContext } from "../pages/Basepage";
 
-const updateChoiceLocalStorage = (choice: Option | string | null) => {
-    if (typeof choice == "object" && choice != null) {
-        localStorage.setItem("selectedCreatorId", choice.value);
-        localStorage.setItem("selectedCreatorName", choice.label);
-    }
-};
 
 type MuptDropdownProps = {
     openModal: boolean;
 }
 
-// TODO: Figure out why useEffect is not working properly with 
 const MuptDropdown: React.FC<MuptDropdownProps> = (props) => {
     const [options, setOptions] = useState([]);
+
+    const { setCurrentCreator } = useContext(CurrentCreatorContext);
+
+    const updateChoiceLocalStorage = (choice: Option | string | null) => {
+        if (typeof choice == "object" && choice != null) {
+            localStorage.setItem("selectedCreatorId", choice.value);
+            localStorage.setItem("selectedCreatorName", choice.label);
+            setCurrentCreator(choice.value);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log("Fetching creators ayaya")
                 const creators = await GetCreators();
                 setOptions(creators["creators"]);
             } catch (error) {

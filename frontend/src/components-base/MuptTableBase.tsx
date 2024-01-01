@@ -1,11 +1,9 @@
 import { Table, Pagination } from 'flowbite-react';
 
-export type StringOnly = {
-  [key: string]: string;
-}
-
 export type Row = {
   id: number;
+  keys: string[];
+  values: string[];
 }
 
 type Column = {
@@ -15,7 +13,7 @@ type Column = {
 
 type MuptTableProps = {
   colNames: Column[];
-  colData: (Row & StringOnly)[];
+  colData: (Row)[];
   currentPage: number;
   totalPages: number;
   onPageChange(page: number): void;
@@ -25,6 +23,7 @@ type MuptTableProps = {
 
 
 // TODO: refactor this into many smaller components
+// IMPORTANT
 
 const MuptTableBase: React.FC<MuptTableProps> = (props) => {
   return (
@@ -44,41 +43,50 @@ const MuptTableBase: React.FC<MuptTableProps> = (props) => {
         </Table.Head>
         <Table.Body className='divide-y'>
           {
-            props.colData.map((colData, index) => (
-              <Table.Row key={index} className="border-gray-700 bg-gray-800">
-                {Object.keys(colData).map((col, index) => (
-                  col === 'id' ? null :
-                    !(props.colNames.some(item => item.accessor === col)) ? null : (
-                      <Table.Cell
-                        className="whitespace-nowrap font-medium text-white border-r-0 border-l-0"
-                        key={index}
-                      >
-                        {colData[col]}
-                      </Table.Cell>
-                    )))}
-                {props.onRowEditClick ? (
+            props.colData.length === 0 ? (
+              <Table.Row className="border-gray-700 bg-gray-800">
+                <Table.Cell colSpan={props.colNames.length + 2}>
+                  No videos available.
+                </Table.Cell>
+              </Table.Row>
+            ) : (
+              props.colData.map((colData, index) => (
+                <Table.Row key={index} className="border-gray-700 bg-gray-800">
+                  {colData.keys.map((col, index) => (
+                    col === 'id' ? null :
+                      !(props.colNames.some(item => item.accessor === col)) ? null : (
+                        <Table.Cell
+                          className="whitespace-nowrap font-medium text-white border-r-0 border-l-0"
+                          key={index}
+                        >
+                          {colData.values[index]}
+                        </Table.Cell>
+                      )))}
+                  {props.onRowEditClick ? (
+                    <Table.Cell>
+                      <a
+                        onClick={props.onRowEditClick(props.colData[index].id)}
+                        className="font-medium text-cyan-500 hover:underline">
+                        Edit
+                      </a>
+                    </Table.Cell>
+                  ) : null}
                   <Table.Cell>
                     <a
-                      onClick={props.onRowEditClick(props.colData[index].id)}
+                      onClick={props.onRowDeleteClick(props.colData[index].id)}
                       className="font-medium text-cyan-500 hover:underline">
-                      Edit
+                      Delete
                     </a>
                   </Table.Cell>
-                ) : null}
-                <Table.Cell>
-                  <a
-                    onClick={props.onRowDeleteClick(props.colData[index].id)}
-                    className="font-medium text-cyan-500 hover:underline">
-                    Delete
-                  </a>
-                </Table.Cell>
-              </Table.Row>))
+                </Table.Row>
+              ))
+            )
           }
         </Table.Body>
       </Table>
       <Pagination
         currentPage={props.currentPage}
-        totalPages={props.totalPages}
+        totalPages={props.totalPages > 0 ? props.totalPages : 1}
         onPageChange={props.onPageChange}
         className="dark" />
     </div>

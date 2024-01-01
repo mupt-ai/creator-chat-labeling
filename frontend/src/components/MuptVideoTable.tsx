@@ -1,32 +1,44 @@
 import MuptTableBase from "../components-base/MuptTableBase"
-import { GetVideos, DeleteVideo, NewVideo } from "../api/Videos"
-import { useState, useEffect } from "react"
-import { Row, StringOnly } from "../components-base/MuptTableBase"
+import { GetVideos, GetPages, DeleteVideo, NewVideo } from "../api/Videos"
+import { useState, useEffect, useContext } from "react"
+import { Row } from "../components-base/MuptTableBase"
+import { CurrentCreatorContext } from "../pages/Basepage"
 
 type Video = {
     id: number;
     video_id: string;
 }
 
+const PAGE_SIZE = 10;
+
+
 const MuptVideoTable = () => {
 
-    const [creatorId, setCreatorId] = useState(localStorage.getItem("selectedCreatorId"));
     const [currentPage, setCurrentPage] = useState(1);
-    const [videos, setVideos] = useState<(Row & StringOnly)[]>([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [videos, setVideos] = useState<Row[]>([]);
+    const { currentCreator } = useContext(CurrentCreatorContext);
 
     useEffect(() => {
-        if (creatorId == null) {
+        if (currentCreator == null) {
             return;
         }
-        GetVideos(currentPage, 10, parseInt(creatorId)).then((res: Video[]) => {
-            res.map((video) => {
-                {
-                    id: video.id;
-                    video_id: video.video_id;
-                }
-            }, setVideos)
+        GetVideos(currentPage, PAGE_SIZE, parseInt(currentCreator)).then((res: Video[]) => {
+            const transformedVideos: (Row)[] = res.map((video) => {
+                return {
+                    id: video.id,
+                    keys: ["video_id"],
+                    values: ["youtube.com/watch?v=" + video.video_id]
+                };
+            });
+            setVideos(transformedVideos);
         })
-    }, [currentPage, creatorId])
+
+        GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res: number) => {
+            setTotalPages(res);
+        })
+
+    }, [currentPage, currentCreator])
 
     const columns = [
         { accessor: 'video_id', header: 'Video ID' },
@@ -40,7 +52,7 @@ const MuptVideoTable = () => {
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 onRowDeleteClick={() => () => console.log("bruh")}
-                totalPages={10} />
+                totalPages={totalPages} />
         </div>
     )
 }
