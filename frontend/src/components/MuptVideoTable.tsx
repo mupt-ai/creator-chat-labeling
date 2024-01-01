@@ -17,7 +17,15 @@ const MuptVideoTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [videos, setVideos] = useState<Row[]>([]);
+    const [loading, setLoading] = useState(false);
     const { currentCreator } = useContext(CurrentCreatorContext);
+
+    const deleteOnClick = (db_id: number) => () => {
+        setLoading(true);
+        DeleteVideo(db_id).then(() => {
+            setLoading(false);
+        })
+    }
 
     useEffect(() => {
         if (currentCreator == null) {
@@ -38,7 +46,7 @@ const MuptVideoTable = () => {
             setTotalPages(res);
         })
 
-    }, [currentPage, currentCreator])
+    }, [currentPage, currentCreator, loading])
 
     const columns = [
         { accessor: 'video_id', header: 'Video ID' },
@@ -51,7 +59,7 @@ const MuptVideoTable = () => {
                 colData={videos}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
-                onRowDeleteClick={() => () => console.log("bruh")}
+                onRowDeleteClick={deleteOnClick}
                 totalPages={totalPages} />
         </div>
     )

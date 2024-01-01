@@ -13,7 +13,7 @@ const GetVideos = async (page: number, pageSize: number, creatorId: number) => {
 }
 
 const DeleteVideo = async (videoId: number) => {
-    const res = await axios.delete(`${API_URL}/videos/${videoId}`);
+    const res = await axios.delete(`${API_URL}/videos?id=${videoId}`);
     return res.data;
 }
 

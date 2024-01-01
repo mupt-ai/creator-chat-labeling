@@ -40,14 +40,13 @@ def videos():
         
         videos = YoutubeTranscripts.query.filter_by(creator_id=creator_id).paginate(page=int(page), per_page=int(page_size), error_out=False).items
 
-
         return [
             {"id": video.id, "video_id": video.video_id}
             for video in videos
         ]
     elif request.method == "DELETE":
-        video_id = request.args.get("video_id")
-        YoutubeTranscripts.query.filter_by(video_id=video_id).delete()
+        id = request.args.get("id")
+        YoutubeTranscripts.query.filter_by(id=id).delete()
         db.session.commit()
 
         return {"message": "Video deleted successfully!"}
