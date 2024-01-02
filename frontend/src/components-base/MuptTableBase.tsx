@@ -3,7 +3,7 @@ import { Table, Pagination } from 'flowbite-react';
 export type Row = {
   id: number;
   keys: string[];
-  values: string[];
+  values: JSX.Element[];
 }
 
 type Column = {

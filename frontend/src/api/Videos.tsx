@@ -3,7 +3,7 @@ import axios from 'axios';
 let API_URL = import.meta.env.VITE_API_URL;
 
 const NewVideo = async (videoUrl: string, creatorId: number) => {
-    const res = await axios.post(`${API_URL}/videos?video_url=${videoUrl}&creator_id=${creatorId}`);
+    const res = await axios.post(`${API_URL}/download_video?video_url=${videoUrl}&creator_id=${creatorId}`);
     return res.data;
 };
 

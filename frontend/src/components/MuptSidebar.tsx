@@ -10,8 +10,8 @@ import {
 const MuptSidebar = () => {
     return (
         <MuptSidebarBase
-            logoUrl="vite.svg"
-            title="Mupt Creator"
+            logoUrl="mupt_logo.svg"
+            title="Creator"
             itemTitleToInfo={[
                 {
                     itemName: "Creator Dashboard",

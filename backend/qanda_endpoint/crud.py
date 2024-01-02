@@ -28,7 +28,7 @@ async def download_video():
             return {"message": "Error downloading video!"}
 
 @training_data_blueprint.route("/videos", methods=["GET", "DELETE"])
-def videos():
+async def videos():
     if request.method == "GET":
         creator_id = request.args.get("creator_id")
         page = request.args.get("page")
@@ -46,9 +46,9 @@ def videos():
         ]
     elif request.method == "DELETE":
         id = request.args.get("id")
-        YoutubeTranscripts.query.filter_by(id=id).delete()
+        transcript = YoutubeTranscripts.query.get(id)
+        db.session.delete(transcript)
         db.session.commit()
-
         return {"message": "Video deleted successfully!"}
 
 @training_data_blueprint.route("/numVideoPages", methods=["GET"])
@@ -68,7 +68,7 @@ def get_num_video_pages():
 @training_data_blueprint.route(
     "/training_data", methods=["POST", "GET", "DELETE", "PUT"]
 )
-def training_data():
+async def training_data():
     if request.method == "POST":
         creator_id = request.args.get("creator_id")
         n_questions = request.args.get("n_questions")

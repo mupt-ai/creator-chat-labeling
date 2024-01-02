@@ -1,4 +1,5 @@
 import { Modal, Label, TextInput, Button } from 'flowbite-react';
+import { useEffect, useState } from 'react';
 
 type MuptModalProps = {
     show: boolean;
@@ -8,11 +9,20 @@ type MuptModalProps = {
     onClick(arg: string): Promise<void>;
 }
 
-import { useState } from 'react';
-
 const MuptOneLabelModalBase: React.FC<MuptModalProps> = (props) => {
 
     const [name, setName] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [buttonLabel, setButtonLabel] = useState('Add');
+
+
+    useEffect(() => {
+        if (loading) {
+            setButtonLabel('Adding...');
+        } else {
+            setButtonLabel('Add');
+        }
+    }, [loading, props.show])
 
     return (<Modal show={props.show} size="md" onClose={props.onClose} popup>
         <Modal.Header />
@@ -33,11 +43,13 @@ const MuptOneLabelModalBase: React.FC<MuptModalProps> = (props) => {
                 </div>
                 <div className="flex">
                     <Button onClick={() => {
+                        setLoading(true);
                         props.onClick(name).then(() => {
                             setName('');
                             props.onClose();
+                            setLoading(false);
                         })
-                    }}>Add</Button>
+                    }}>{buttonLabel}</Button>
                 </div>
             </div>
         </Modal.Body>

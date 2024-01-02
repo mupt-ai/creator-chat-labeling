@@ -4,6 +4,7 @@ import { useState, createContext } from "react";
 import MuptNewVideoButton from "../components/MuptNewVideoButton";
 import MuptVideoTable from "../components/MuptVideoTable";
 import BasePage from "./Basepage";
+import MuptNewVideoModal from "../components/MuptNewVideoModal";
 
 const Videos = () => {
     const [showModal, setShowModal] = useState(false);
@@ -13,7 +14,6 @@ const Videos = () => {
     }
 
     const openModal = () => {
-        console.log(showModal);
         setShowModal(true);
     }
 
@@ -23,9 +23,10 @@ const Videos = () => {
                 <div className="flex flex-row grow">
                     <MuptCreatorSelect openModal={showModal} />
                     <MuptNewVideoButton onClick={openModal} />
+                    <MuptNewVideoModal show={showModal} onClose={closeModal} />
                 </div>
                 <div className="mr-16 ml-16 mt-16">
-                    <MuptVideoTable />
+                    <MuptVideoTable openModal={showModal} />
                 </div>
             </>
         }></BasePage>

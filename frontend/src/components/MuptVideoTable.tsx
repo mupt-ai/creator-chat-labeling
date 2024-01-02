@@ -9,10 +9,20 @@ type Video = {
     video_id: string;
 }
 
+type MuptVideoTableProps = {
+    openModal: boolean;
+}
+
 const PAGE_SIZE = 10;
 
-
-const MuptVideoTable = () => {
+const linkStringToLink = (link: string) => {
+    return (
+        <a href={link} target="_blank" className="text-blue-500 underline">
+            {link}
+        </a>
+    )
+}
+const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -28,15 +38,20 @@ const MuptVideoTable = () => {
     }
 
     useEffect(() => {
+        if (loading) {
+            return;
+        }
+
         if (currentCreator == null) {
             return;
         }
+
         GetVideos(currentPage, PAGE_SIZE, parseInt(currentCreator)).then((res: Video[]) => {
             const transformedVideos: (Row)[] = res.map((video) => {
                 return {
                     id: video.id,
                     keys: ["video_id"],
-                    values: ["youtube.com/watch?v=" + video.video_id]
+                    values: [linkStringToLink("https://www.youtube.com/watch?v=" + video.video_id)]
                 };
             });
             setVideos(transformedVideos);
@@ -46,10 +61,10 @@ const MuptVideoTable = () => {
             setTotalPages(res);
         })
 
-    }, [currentPage, currentCreator, loading])
+    }, [currentPage, currentCreator, loading, props.openModal])
 
     const columns = [
-        { accessor: 'video_id', header: 'Video ID' },
+        { accessor: 'video_id', header: 'Video' },
     ]
 
     return (
