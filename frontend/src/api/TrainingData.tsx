@@ -2,21 +2,13 @@ import axios from 'axios';
 
 let API_URL = import.meta.env.VITE_API_URL;
 
-const NewTrainingData = async (creatorId: number, numQuestions: number, videoId: number) => {
-    const params = new URLSearchParams();
-    params.append('creator_id', creatorId.toString());
-    params.append('num_questions', numQuestions.toString());
-    params.append('video_id', videoId.toString());
-    const res = await axios.post(`${API_URL}/training_data`, params);
+const NewTrainingData = async (creatorId: number, numQuestions: number, videoId: string) => {
+    const res = await axios.post(`${API_URL}/training_data?creator_id=${creatorId.toString()}&n_questions=${numQuestions.toString()}&video_id=${videoId}`);
     return res.data;
 };
 
 const GetTrainingData = async (creatorId: number, page: number, pageSize: number) => {
-    const params = new URLSearchParams();
-    params.append('creator_id', creatorId.toString());
-    params.append('page', page.toString());
-    params.append('page_size', pageSize.toString());
-    const res = await axios.get(`${API_URL}/training_data`, { params });
+    const res = await axios.get(`${API_URL}/training_data?creator_id=${creatorId}&page=${page}&page_size=${pageSize}`);
     return res.data;
 }
 
@@ -34,4 +26,12 @@ const EditTrainingData = async (trainingDataId: number, question: string, answer
     return res.data;
 }
 
-export { NewTrainingData, GetTrainingData, DeleteTrainingData, EditTrainingData };
+const GetPages = async (pageSize: number, creatorId: number) => {
+    const params = new URLSearchParams();
+    params.append('page_size', pageSize.toString());
+    params.append('creator_id', creatorId.toString());
+    const res = await axios.get(`${API_URL}/training_data_pages`, { params });
+    return res.data;
+}
+
+export { NewTrainingData, GetTrainingData, DeleteTrainingData, EditTrainingData, GetPages };

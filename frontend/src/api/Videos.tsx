@@ -22,4 +22,9 @@ const GetPages = async (pageSize: number, creatorId: number) => {
     return res.data;
 }
 
-export { NewVideo, GetVideos, DeleteVideo, GetPages };
+const GetAllVideos = async (creatorId: number) => {
+    const res = await axios.get(`${API_URL}/videos?creator_id=${creatorId}`);
+    return res.data;
+}
+
+export { NewVideo, GetVideos, DeleteVideo, GetPages, GetAllVideos };

@@ -18,7 +18,6 @@ class TrainingData(db.Model):
     creator_id = db.Column(db.Integer, nullable=False)
     video_id = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    __mapper_args__ = {'order_by': date_created.desc()}
 
 
 class YoutubeTranscripts(db.Model):

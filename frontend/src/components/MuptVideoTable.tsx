@@ -3,8 +3,9 @@ import { GetVideos, GetPages, DeleteVideo } from "../api/Videos"
 import { useState, useEffect, useContext } from "react"
 import { Row } from "../components-base/MuptTableBase"
 import { CurrentCreatorContext } from "../pages/Basepage"
+import { linkStringToLink } from "../components-helper/helpers"
 
-type Video = {
+export type Video = {
     id: number;
     video_id: string;
 }
@@ -15,13 +16,6 @@ type MuptVideoTableProps = {
 
 const PAGE_SIZE = 10;
 
-const linkStringToLink = (link: string) => {
-    return (
-        <a href={link} target="_blank" className="text-blue-500 underline">
-            {link}
-        </a>
-    )
-}
 const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -57,8 +51,8 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
             setVideos(transformedVideos);
         })
 
-        GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res: number) => {
-            setTotalPages(res);
+        GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res) => {
+            setTotalPages(res.num_pages);
         })
 
     }, [currentPage, currentCreator, loading, props.openModal])
@@ -75,7 +69,8 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 onRowDeleteClick={deleteOnClick}
-                totalPages={totalPages} />
+                totalPages={totalPages}
+                defaultText="No videos available." />
         </div>
     )
 }

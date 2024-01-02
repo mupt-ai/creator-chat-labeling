@@ -1,4 +1,5 @@
 import { Table, Pagination } from 'flowbite-react';
+import { useEffect } from 'react';
 
 export type Row = {
   id: number;
@@ -16,6 +17,7 @@ type MuptTableProps = {
   colData: (Row)[];
   currentPage: number;
   totalPages: number;
+  defaultText: string;
   onPageChange(page: number): void;
   onRowEditClick?(db_id: number): () => void;
   onRowDeleteClick(db_id: number): () => void;
@@ -26,6 +28,7 @@ type MuptTableProps = {
 // IMPORTANT
 
 const MuptTableBase: React.FC<MuptTableProps> = (props) => {
+  console.log(props.totalPages)
   return (
     <div>
       <Table className='dark' hoverable>
@@ -46,7 +49,7 @@ const MuptTableBase: React.FC<MuptTableProps> = (props) => {
             props.colData.length === 0 ? (
               <Table.Row className="border-gray-700 bg-gray-800">
                 <Table.Cell colSpan={props.colNames.length + 2}>
-                  No videos available.
+                  {props.defaultText}
                 </Table.Cell>
               </Table.Row>
             ) : (
@@ -56,7 +59,7 @@ const MuptTableBase: React.FC<MuptTableProps> = (props) => {
                     col === 'id' ? null :
                       !(props.colNames.some(item => item.accessor === col)) ? null : (
                         <Table.Cell
-                          className="whitespace-nowrap font-medium text-white border-r-0 border-l-0"
+                          className="whitespace-wrap font-medium text-white border-r-0 border-l-0"
                           key={index}
                         >
                           {colData.values[index]}
@@ -86,7 +89,7 @@ const MuptTableBase: React.FC<MuptTableProps> = (props) => {
       </Table>
       <Pagination
         currentPage={props.currentPage}
-        totalPages={props.totalPages > 0 ? props.totalPages : 1}
+        totalPages={props.totalPages}
         onPageChange={props.onPageChange}
         className="dark" />
     </div>

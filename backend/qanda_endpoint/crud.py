@@ -38,7 +38,10 @@ async def videos():
         if not creator:
             return {"message": "Invalid creator_id!"}
         
-        videos = YoutubeTranscripts.query.filter_by(creator_id=creator_id).paginate(page=int(page), per_page=int(page_size), error_out=False).items
+        if page: 
+            videos = YoutubeTranscripts.query.filter_by(creator_id=creator_id).paginate(page=int(page), per_page=int(page_size), error_out=False).items
+        else:
+            videos = YoutubeTranscripts.query.filter_by(creator_id=creator_id).all()
 
         return [
             {"id": video.id, "video_id": video.video_id}
@@ -61,7 +64,9 @@ def get_num_video_pages():
         if not creator:
             return {"message": "Invalid creator_id!"}
         
-        num_pages = YoutubeTranscripts.query.filter_by(creator_id=creator_id).count() // int(page_size) + 1
+        transcript_count = YoutubeTranscripts.query.filter_by(creator_id=creator_id).count()
+        one_factor = 1 if transcript_count % int(page_size) != 0 else 0
+        num_pages = transcript_count // int(page_size) + one_factor
 
         return {"num_pages": num_pages}
 
@@ -91,7 +96,7 @@ async def training_data():
         creator_id = request.args.get("creator_id")
         page = request.args.get("page")
         page_size = request.args.get("page_size")
-        creator_filtered = TrainingData.query.filter_by(creator_id=creator_id)
+        creator_filtered = TrainingData.query.filter_by(creator_id=creator_id).order_by(TrainingData.date_created.desc())
         training_data = creator_filtered.paginate(page=int(page), 
                                                   per_page=int(page_size), 
                                                   error_out=False).items
@@ -121,3 +126,19 @@ async def training_data():
         db.session.commit()
 
         return {"message": "Training data updated successfully!"}
+
+@training_data_blueprint.route("/training_data_pages", methods=["GET"])
+def get_num_training_data_pages():
+    if request.method == "GET":
+        creator_id = request.args.get("creator_id")
+        page_size = request.args.get("page_size")
+
+        creator = Creators.query.filter_by(id=creator_id).first()
+        if not creator:
+            return {"message": "Invalid creator_id!"}
+        
+        data_count = TrainingData.query.filter_by(creator_id=creator_id).count()
+        one_factor = 1 if data_count % int(page_size) != 0 else 0
+        num_pages = data_count // int(page_size) + one_factor
+
+        return {"num_pages": num_pages}

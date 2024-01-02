@@ -2,9 +2,10 @@ import MuptTableBase from "../components-base/MuptTableBase"
 import { useState, useEffect, useContext } from "react"
 import { Row } from "../components-base/MuptTableBase"
 import { CurrentCreatorContext } from "../pages/Basepage"
-import { DeleteTrainingData, GetTrainingData } from "../api/TrainingData"
+import { DeleteTrainingData, GetTrainingData, GetPages } from "../api/TrainingData"
+import { linkStringToLink, stringToText } from "../components-helper/helpers"
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 type TrainingData = {
     id: number;
@@ -14,23 +15,11 @@ type TrainingData = {
     date_created: string;
 }
 
-const linkStringToLink = (link: string) => {
-    return (
-        <a href={link} target="_blank" className="text-blue-500 underline">
-            {link}
-        </a>
-    )
+type MuptTrainingTableProps = {
+    openModal: boolean;
 }
 
-const stringToText = (text: string) => {
-    return (
-        <p>
-            {text}
-        </p>
-    )
-}
-
-const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
+const MuptTrainingTable: React.FC<MuptTrainingTableProps> = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -54,7 +43,7 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
             return;
         }
 
-        GetTrainingData(currentPage, PAGE_SIZE, parseInt(currentCreator)).then((res: TrainingData[]) => {
+        GetTrainingData(parseInt(currentCreator), currentPage, PAGE_SIZE).then((res: TrainingData[]) => {
             const transformedTrainingData: (Row)[] = res.map((data) => {
                 return {
                     id: data.id,
@@ -70,27 +59,31 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
             setData(transformedTrainingData);
         })
 
-        GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res: number) => {
-            setTotalPages(res);
+        GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res) => {
+            setTotalPages(res.num_pages);
         })
 
     }, [currentPage, currentCreator, loading, props.openModal])
 
     const columns = [
         { accessor: 'video_id', header: 'Video' },
+        { accessor: 'question', header: 'Question' },
+        { accessor: 'answer', header: 'Answer' },
+        { accessor: 'date_created', header: 'Date Created' },
     ]
 
     return (
         <div className="mr-16 ml-16 mt-16">
             <MuptTableBase
                 colNames={columns}
-                colData={videos}
+                colData={data}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 onRowDeleteClick={deleteOnClick}
-                totalPages={totalPages} />
+                totalPages={totalPages}
+                defaultText="No training data available." />
         </div>
     )
 }
 
-export default MuptVideoTable;
+export default MuptTrainingTable;

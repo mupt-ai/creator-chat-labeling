@@ -5,9 +5,8 @@ export type Option = {
     label: string;
 }
 
-type MuptDropdownProps = {
+export type MuptDropdownProps = {
     options: Option[];
-    // function onChange(choice: Option): void;
     defaultValue: Option | string | null;
     onChange(option: Option | string | null): void;
 }
