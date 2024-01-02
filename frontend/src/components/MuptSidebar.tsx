@@ -1,20 +1,46 @@
-import { Sidebar } from 'flowbite-react'
-import { HiUser, HiPlusCircle } from 'react-icons/hi';
+import MuptSidebarBase from '../components-base/MuptSidebarBase';
+import {
+    HiChartPie,
+    HiVideoCamera,
+    HiTable,
+    HiUser,
+    HiChat,
+} from 'react-icons/hi';
 
-function MuptSidebar() {
-  return (
-    <Sidebar>
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiUser}>
-            Creators 
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiPlusCircle}>
-            Training Data 
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
-  );
+const MuptSidebar = () => {
+    return (
+        <MuptSidebarBase
+            logoUrl="mupt_logo.svg"
+            title="Creator"
+            itemTitleToInfo={[
+                {
+                    itemName: "Creator Dashboard",
+                    href: "/",
+                    icon: HiUser,
+                },
+                {
+                    itemName: "New Videos",
+                    href: "/videos",
+                    icon: HiVideoCamera
+                },
+                {
+                    itemName: "Training Data",
+                    href: "#",
+                    icon: HiTable
+                },
+                {
+                    itemName: "Bot Analytics",
+                    href: "#",
+                    icon: HiChartPie
+                },
+                {
+                    itemName: "Test Chat",
+                    href: "#",
+                    icon: HiChat
+                }
+            ]}
+        />
+    )
 }
+
 export default MuptSidebar;

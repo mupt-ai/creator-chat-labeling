@@ -3,6 +3,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 
 from creator_endpoints.crud import creators_blueprint
 from qanda_endpoint.crud import training_data_blueprint
@@ -12,6 +13,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_CONNECTION_STRING")
+
+cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:5173"]}})
 
 # Initialize the extension with the Flask app
 db.init_app(app)
