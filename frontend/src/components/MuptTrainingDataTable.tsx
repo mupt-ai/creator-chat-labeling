@@ -1,32 +1,35 @@
 import MuptTableBase from "../components-base/MuptTableBase"
-import { GetVideos, GetPages, DeleteVideo } from "../api/Videos"
 import { useState, useEffect, useContext } from "react"
 import { Row } from "../components-base/MuptTableBase"
 import { CurrentCreatorContext } from "../pages/Basepage"
-import { linkStringToLink } from "../components-helper/helpers"
+import { DeleteTrainingData, GetTrainingData, GetPages } from "../api/TrainingData"
+import { linkStringToLink, stringToText } from "../components-helper/helpers"
 
-export type Video = {
+const PAGE_SIZE = 5;
+
+type TrainingData = {
     id: number;
     video_id: string;
+    question: string;
+    answer: string;
+    date_created: string;
 }
 
-type MuptVideoTableProps = {
+type MuptTrainingTableProps = {
     openModal: boolean;
 }
 
-const PAGE_SIZE = 10;
-
-const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
+const MuptTrainingTable: React.FC<MuptTrainingTableProps> = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [videos, setVideos] = useState<Row[]>([]);
+    const [data, setData] = useState<Row[]>([]);
     const [loading, setLoading] = useState(false);
     const { currentCreator } = useContext(CurrentCreatorContext);
 
     const deleteOnClick = (db_id: number) => () => {
         setLoading(true);
-        DeleteVideo(db_id).then(() => {
+        DeleteTrainingData(db_id).then(() => {
             setLoading(false);
         })
     }
@@ -40,15 +43,20 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
             return;
         }
 
-        GetVideos(currentPage, PAGE_SIZE, parseInt(currentCreator)).then((res: Video[]) => {
-            const transformedVideos: (Row)[] = res.map((video) => {
+        GetTrainingData(parseInt(currentCreator), currentPage, PAGE_SIZE).then((res: TrainingData[]) => {
+            const transformedTrainingData: (Row)[] = res.map((data) => {
                 return {
-                    id: video.id,
-                    keys: ["video_id"],
-                    values: [linkStringToLink("https://www.youtube.com/watch?v=" + video.video_id)]
+                    id: data.id,
+                    keys: ["video_id", "question", "answer", "date_created"],
+                    values: [
+                        linkStringToLink("https://www.youtube.com/watch?v=" + data.video_id),
+                        stringToText(data.question),
+                        stringToText(data.answer),
+                        stringToText(data.date_created),
+                    ]
                 };
             });
-            setVideos(transformedVideos);
+            setData(transformedTrainingData);
         })
 
         GetPages(PAGE_SIZE, parseInt(currentCreator)).then((res) => {
@@ -59,20 +67,23 @@ const MuptVideoTable: React.FC<MuptVideoTableProps> = (props) => {
 
     const columns = [
         { accessor: 'video_id', header: 'Video' },
+        { accessor: 'question', header: 'Question' },
+        { accessor: 'answer', header: 'Answer' },
+        { accessor: 'date_created', header: 'Date Created' },
     ]
 
     return (
         <div className="mr-16 ml-16 mt-16">
             <MuptTableBase
                 colNames={columns}
-                colData={videos}
+                colData={data}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 onRowDeleteClick={deleteOnClick}
                 totalPages={totalPages}
-                defaultText="No videos available." />
+                defaultText="No training data available." />
         </div>
     )
 }
 
-export default MuptVideoTable;
+export default MuptTrainingTable;

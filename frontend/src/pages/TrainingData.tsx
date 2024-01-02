@@ -1,11 +1,11 @@
 import MuptCreatorSelect from "../components/MuptCreatorSelect"
 import { useState } from "react";
-import MuptNewVideoButton from "../components/MuptNewVideoButton";
-import MuptVideoTable from "../components/MuptVideoTable";
+import MuptNewTrainingDataButton from "../components/MuptNewTrainingDataButton";
 import BasePage from "./Basepage";
-import MuptNewVideoModal from "../components/MuptNewVideoModal";
+import MuptNewTrainingDataModal from "../components/MuptNewTrainingDataModal";
+import MuptTrainingTable from "../components/MuptTrainingDataTable";
 
-const Videos = () => {
+const TrainingData = () => {
     const [showModal, setShowModal] = useState(false);
 
     const closeModal = () => {
@@ -21,16 +21,16 @@ const Videos = () => {
             <>
                 <div className="flex flex-row grow">
                     <MuptCreatorSelect openModal={showModal} />
-                    <MuptNewVideoButton onClick={openModal} />
-                    <MuptNewVideoModal show={showModal} onClose={closeModal} />
+                    <MuptNewTrainingDataButton onClick={openModal} />
+                    <MuptNewTrainingDataModal show={showModal} onClose={closeModal} />
                 </div>
                 <div className="mr-16 ml-16 mt-16">
-                    <MuptVideoTable openModal={showModal} />
+                    <MuptTrainingTable openModal={showModal} />
                 </div>
             </>
         }></BasePage>
     )
 }
 
-export default Videos;
+export default TrainingData;
 
