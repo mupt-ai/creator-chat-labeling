@@ -25,7 +25,7 @@ const MuptSidebar = () => {
                 },
                 {
                     itemName: "Training Data",
-                    href: "#",
+                    href: "/training-data",
                     icon: HiTable
                 },
                 {

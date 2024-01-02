@@ -1,8 +1,5 @@
 import MuptSidebar from "../components/MuptSidebar"
-import MuptCreatorSelect from "../components/MuptCreatorSelect"
 import { useState, createContext } from "react";
-import MuptNewVideoButton from "../components/MuptNewVideoButton";
-import MuptVideoTable from "../components/MuptVideoTable";
 
 interface CurrentCreatorContextType {
     currentCreator: string | null;

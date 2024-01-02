@@ -1,10 +1,10 @@
 import './App.css'
 import Dashboard from './pages/Dashboard';
 import Videos from './pages/Videos';
+import TrainingData from './pages/TrainingData';
 
 import {
   createBrowserRouter,
-  Route,
   RouterProvider,
 } from "react-router-dom";
 
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/videos",
     element: <Videos />,
+  },
+  {
+    path: "/training-data",
+    element: <TrainingData />,
   }
 ]);
 

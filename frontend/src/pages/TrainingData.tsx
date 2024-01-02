@@ -5,7 +5,7 @@ import MuptVideoTable from "../components/MuptVideoTable";
 import BasePage from "./Basepage";
 import MuptNewVideoModal from "../components/MuptNewVideoModal";
 
-const Videos = () => {
+const TrainingData = () => {
     const [showModal, setShowModal] = useState(false);
 
     const closeModal = () => {
@@ -32,5 +32,5 @@ const Videos = () => {
     )
 }
 
-export default Videos;
+export default TrainingData;
 

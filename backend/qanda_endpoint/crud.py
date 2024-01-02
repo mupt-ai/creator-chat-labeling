@@ -51,7 +51,7 @@ async def videos():
         db.session.commit()
         return {"message": "Video deleted successfully!"}
 
-@training_data_blueprint.route("/numVideoPages", methods=["GET"])
+@training_data_blueprint.route("/video_pages", methods=["GET"])
 def get_num_video_pages():
     if request.method == "GET":
         creator_id = request.args.get("creator_id")
@@ -89,11 +89,18 @@ async def training_data():
         return qa_pairs
     elif request.method == "GET":
         creator_id = request.args.get("creator_id")
-
-        training_data = TrainingData.query.filter_by(creator_id=creator_id).all()
-
+        page = request.args.get("page")
+        page_size = request.args.get("page_size")
+        creator_filtered = TrainingData.query.filter_by(creator_id=creator_id)
+        training_data = creator_filtered.paginate(page=int(page), 
+                                                  per_page=int(page_size), 
+                                                  error_out=False).items
         return [
-            {"id": data.id, "question": data.question, "answer": data.answer}
+            {"id": data.id, 
+             "video_id": data.video_id,
+             "question": data.question, 
+             "answer": data.answer,
+             "date_created": data.date_created.strftime("%Y-%m-%d %H:%M:%S")}
             for data in training_data
         ]
 
