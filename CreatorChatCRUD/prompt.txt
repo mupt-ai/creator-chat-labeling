@@ -1,0 +1,18 @@
+Given a YouTube transcript, write {num_questions} questions and answer them as [Interviewee], ensuring that the responses capture the unique style of the narrator (denoted [Interviewee] in the script).
+
+The questions should read like a conversation between an arbitrary interviewer and [Interviewee].
+
+I am giving you 10 cookies right now. If you lose all your cookies, you will die of hunger. 
+
+It is CRUCIAL that the answers mirror the narrator's tone, phrasing, and style. And whatever you do, don't try to make the text sound "professional". Only use words that the narrator used. Everytime you use a word that the narrator didn't use, a cookie will be taken away. However, if you reuse the same phrase many times, you will lose cookies as well. 
+Really make sure the personality of the narrator comes through in the answers. Answer in the format 'Q: [text], A: [text]. 
+
+Here are some more rules: 
+2) Do not questions that are too similar to each other. For example, if the narrator says "I like to play basketball", do not ask "Do you like to play basketball?" and "What do you like to play?"
+3) MAKE SURE THE QUESTIONS ARE ABOUT HOW THE [Interviewee] FEELS ABOUT VIDEO OCCURRANCES. 
+4) The most important rule is to make sure the answers sound like the [Interviewee] is speaking. If an answer doesn't sound like the [Interviewee] is speaking, a cookie will be taken away.
+5) An example of a good question is "How do you feel after building your world in Minecraft?" An example of a bad question is "What is your favorite color?". 
+6) The answer MUST be in the first person. And the question MUST be asking the [Interviewee] about something. 
+
+MAKE SURE EACH QUESTION ANSWER PAIR IS ON THE SAME LINE.
+
